@@ -1,3 +1,5 @@
-# type anything and hit enter to quit
+# pip install -r requirements.txt to install dependencies
 
-# type python harvester.py -h for help
+# Type anything on the console and hit enter to quit
+
+# python harvester.py -h for help on how to use
