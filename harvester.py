@@ -9,14 +9,16 @@ import re
 
 def harvester(url_queue, email_queue, visited_dict, domain=None):
     if not domain:
-        regex = '[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}'
+        regex = ' [a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+) '
+        # regex = '[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,15}'
     else:
-        regex = f'[a-z0-9]+[\._]?[a-z0-9]+[@]{domain}'
+        regex = ' [a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@' + domain + ' '
+        # regex = f'[a-z0-9]+[\._]?[a-z0-9]+[@]{domain}'
 
     while True:
         url = url_queue.get()
         visited_dict[url] = True
-        print('checking in ' + url, end='\r')
+        print('checking in ' + url, end='\n')
         try:
             html = requests.get(url).content
         except:
@@ -33,10 +35,10 @@ def harvester(url_queue, email_queue, visited_dict, domain=None):
 
         for link in soup.find_all('a'):
             href = link.get('href')
-            if href and not visited_dict.get(href):
+            if href and not href.startswith('#') and not visited_dict.get(href):
                 url_queue.put(link['href'])
 
-        emails = re.findall(regex, all_text.lower())
+        emails = re.findall(regex, all_text)
         if (emails):
             for email in emails:
                 email_queue.put(email)
