@@ -59,7 +59,8 @@ def run_harvester(entry, domain=None):
     url_queue = Queue()
     email_queue = Queue()
     visited_dict = dict()
-    url_queue.put(entry)
+    google = 'https://www.google.com/search?q=' + entry
+    url_queue.put(google)
 
     harvester_args = (url_queue,
                       email_queue,
